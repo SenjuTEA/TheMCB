@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>THE MCB</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Alarm Meds Box</h1>
+        <div class="timer-section">
+            <label for="timer">Set Timer (Minutes):</label>
+            <input type="number" id="timer" min="1" placeholder="Enter minutes">
+            <button id="startButton">Start Timer</button>
+        </div>
+        <div class="countdown">
+            <h2>Timer: <span id="countdownDisplay">00:00</span></h2>
+        </div>
+        <div id="alarmMessage" class="hidden">
+            <h2>Time's up! Please take your medication.</h2>
+        </div>
+    </div>
+    
+    <script src="script.js"></script>
+</body>
+</html>
+/* Basic Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f7f7f7;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+}
+
+.container {
+    text-align: center;
+    padding: 20px;
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1);
+    width: 300px;
+}
+
+h1 {
+    font-size: 24px;
+    color: #333;
+    margin-bottom: 20px;
+}
+
+.timer-section {
+    margin-bottom: 20px;
+}
+
+label {
+    font-size: 16px;
+    color: #555;
+}
+
+input[type="number"] {
+    padding: 10px;
+    margin-top: 10px;
+    width: 80%;
+    font-size: 16px;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+}
+
+button {
+    padding: 10px 20px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+button:hover {
+    background-color: #45a049;
+}
+
+.countdown {
+    margin-top: 30px;
+}
+
+h2 {
+    font-size: 20px;
+    color: #333;
+}
+
+#countdownDisplay {
+    font-size: 24px;
+    font-weight: bold;
+}
+
+#alarmMessage {
+    background-color: #f44336;
+    color: white;
+    padding: 20px;
+    border-radius: 8px;
+    margin-top: 20px;
+}
+
+.hidden {
+    display: none;
+}
+// Function to start the countdown timer
+document.getElementById("startButton").addEventListener("click", function() {
+    let timerInput = document.getElementById("timer").value;
+    
+    // Ensure the input is a valid number
+    if (timerInput <= 0 || isNaN(timerInput)) {
+        alert("Please enter a valid number greater than 0.");
+        return;
+    }
+    
+    let minutes = parseInt(timerInput);
+    let seconds = 0;
+    
+    // Convert minutes to seconds
+    let totalSeconds = minutes * 60 + seconds;
+
+    // Update the display
+    let countdownDisplay = document.getElementById("countdownDisplay");
+    
+    let countdownInterval = setInterval(function() {
+        let minutesLeft = Math.floor(totalSeconds / 60);
+        let secondsLeft = totalSeconds % 60;
+        
+        // Update the countdown display
+        countdownDisplay.textContent = `${String(minutesLeft).padStart(2, '0')}:${String(secondsLeft).padStart(2, '0')}`;
+        
+        // Decrease total seconds by 1 every second
+        totalSeconds--;
+        
+        // If the timer reaches 0, stop the interval and show the alarm message
+        if (totalSeconds < 0) {
+            clearInterval(countdownInterval);
+            document.getElementById("alarmMessage").classList.remove("hidden");
+            countdownDisplay.textContent = "00:00"; // Reset display to 00:00
+        }
+    }, 1000);
+});
